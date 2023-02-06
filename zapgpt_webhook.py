@@ -3,6 +3,7 @@ import openai
 from heyoo import WhatsApp
 from dotenv import load_dotenv
 from flask import Flask, request, make_response
+from threading import Thread
 
 load_dotenv()
 
@@ -18,6 +19,30 @@ app = Flask(__name__)
 
 messenger = WhatsApp(TOKEN, ID)
 VERIFY_TOKEN = os.getenv('VERIFY_TOKEN')
+
+
+def resposta(message, mobile):
+
+    message = f"Human: {message}\nIA: "
+
+    try:
+
+        completion = openai.Completion.create(
+            engine=model_engine,
+            prompt=message,
+            max_tokens=1024,
+            n=1,
+            stop=None,
+            temperature=0.9,
+        )
+
+        resposta = completion["choices"][0]["text"]
+
+        messenger.send_message(resposta, mobile)
+
+    except Exception as err:
+        messenger.send_message("Ops! Falhei em comunicar com o GPT, tente novamente...", mobile)
+
 
 @app.route("/", methods=["GET", "POST"])
 def hook():
@@ -48,25 +73,7 @@ def hook():
                 message = messenger.get_message(data)
                 name = messenger.get_name(data)
 
-                message = f"Human: {message}\nIA: "
-
-                try:
-
-                    completion = openai.Completion.create(
-                        engine=model_engine,
-                        prompt=message,
-                        max_tokens=1024,
-                        n=1,
-                        stop=None,
-                        temperature=0.9,
-                    )
-
-                    resposta = completion["choices"][0]["text"]
-
-                    messenger.send_message(resposta, mobile)
-
-                except Exception as err:
-                    messenger.send_message("Ops! Falhei em comunicar com o GPT, tente novamente...", mobile)
+                Thread(target=resposta, args=(message, mobile)).start()
 
             else:
                 messenger.send_message(f"Foi mal! Trabalhamos apenas com mensagens de texto...", mobile)
