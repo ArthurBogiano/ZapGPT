@@ -1,0 +1,4 @@
+heyoo
+flask
+openai
+python-dotenv
