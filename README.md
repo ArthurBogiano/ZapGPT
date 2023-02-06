@@ -25,6 +25,10 @@ Para usar o ZapGPT Free, basta enviar uma mensagem para o número de telefone fo
 
 Experimente o ZapGPT Free agora mesmo e descubra como a inteligência artificial pode tornar a sua vida mais fácil e conveniente!
 
+## Número atual
+
+Para utilizar o ZapGPT Free mande uma mensagem no WhatsApp para o número [+55 (71) 99172-3923](https://api.whatsapp.com/send?phone=5571991723923)
+
 ## Doações
 
 O ZapGPT Free é mantido por doações da comunidade! Caso queira contribuir, segue o link:
